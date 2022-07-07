@@ -8,7 +8,7 @@ ROBOTSTXT_OBEY = True
 BASE_DIR = 'results'
 
 FEEDS = {
-    '{BASE_DIR}/pep_%(time)s.csv': {
+    'results/pep_%(time)s.csv': {
         'format': 'csv',
         'fields': ['number', 'name', 'status'],
         'overwrite': True
