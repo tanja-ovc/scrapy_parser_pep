@@ -17,8 +17,6 @@ count_statuses = {
 
 
 class PepParsePipeline:
-    now = dt.datetime.now()
-    current_time = now.strftime('%Y-%m-%d_%H-%M-%S')
 
     def open_spider(self, spider):
         pass
@@ -26,8 +24,13 @@ class PepParsePipeline:
     def process_item(self, item, spider):
         status = item['status']
         count_statuses[status] = count_statuses.get(status, 0) + 1
+        return item
+
+    def close_spider(self, spider):
         all_peps_count = sum(count_statuses.values())
-        filename = f'{BASE_DIR}/status_summary_{self.current_time}.csv'
+        now = dt.datetime.now()
+        current_time = now.strftime('%Y-%m-%d_%H-%M-%S')
+        filename = f'{BASE_DIR}/status_summary_{current_time}.csv'
         with open(filename, 'w', newline='') as f:
             pep_csv_writer = csv.writer(f)
             pep_csv_writer.writerow(['Статус', 'Количество'])
@@ -36,7 +39,3 @@ class PepParsePipeline:
             ]
             pep_csv_writer.writerows(pep_table_rows)
             pep_csv_writer.writerow(['Total', all_peps_count])
-        return item
-
-    def close_spider(self, spider):
-        pass
